@@ -6,156 +6,92 @@
 /*   By: wlalaoui <wlalaoui@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 13:22:32 by wlalaoui          #+#    #+#             */
-/*   Updated: 2024/01/29 13:11:55 by wlalaoui         ###   ########.fr       */
+/*   Updated: 2024/01/31 13:05:20 by wlalaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini_rt.h"
 
-int	count_number_of_object(char *buffer)
+int	parse_objects(t_scene *scene, char **buf_t, size_t i, size_t j)
 {
-	size_t	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (buffer[i])
+	if (ft_strcmp("cy", buf_t[i]) == 0)
 	{
-		if ((buffer[i] == 'c' && buffer[i + 1] == 'y') //cylinder
-		|| (buffer[i] == 'p' && buffer[i + 1] == 'l') // plane
-		|| (buffer[i] == 's' && buffer[i + 1] == 'p')) //sphere
-			count++;
-		i++;
+		if (parse_cy(scene, buf_t, i, j) == -1)
+			return (-1);
+		return (0);
 	}
-	return (count);
+	else if (ft_strcmp("pl", buf_t[i]) == 0)
+	{
+		if (parse_pl(scene, buf_t, i, j) == -1)
+			return (-1);
+		return (0);
+	}
+	else if (ft_strcmp("sp", buf_t[i]) == 0)
+	{
+		if (parse_sp(scene, buf_t, i, j) == -1)
+			return (-1);
+		return (0);
+	}
+	return (1);
 }
 
-t_scene	*init_objects_a(char *buffer)
+int	parse_items(t_scene *scene, char **buf_t, size_t i)
 {
-	char	**buf_t;
-	char		**temp;
+	if (ft_strcmp("L", buf_t[i]) == 0)
+	{
+		if (parse_light(scene, buf_t, i) == -1)
+			return (-1);
+		return (0);
+	}
+	else if (ft_strcmp("C", buf_t[i]) == 0)
+	{
+		if (parse_camera(scene, buf_t, i) == -1)
+			return (-1);
+		return (0);
+	}
+	else if (ft_strcmp("A", buf_t[i]) == 0)
+	{
+		if (parse_ambientlight(scene, buf_t, i) == -1)
+			return (-1);
+		return (0);
+	}
+	return (1);
+}
+
+int	allocate(t_scene **scene, char ***buf_t, char *buffer)
+{
+	*buf_t = ft_split(buffer, ' ');
+	if (!*buf_t)
+		return (-1);
+	*scene = malloc(sizeof(t_scene));
+	if (!*scene)
+		return (free_ft_split(*buf_t), -1);
+	(*scene)->objectlst = malloc(sizeof(t_object) * count_objects(buffer));
+	if (!(*scene)->objectlst)
+		return (free(*scene), free_ft_split(*buf_t), -1);
+	(*scene)->objectlstsize = count_objects(buffer);
+	return (0);
+}
+
+t_scene	*init_all(char *buffer)
+{
+	char		**buf_t;
 	size_t		i;
 	size_t		j;
-	t_scene *scene;
+	t_scene		*scene;
+	int			return_value;
 
-	buf_t = ft_split(buffer, ' ');
-	if (!buf_t)
-		exit(1); //todo : recheck this
-	scene = malloc(sizeof(t_scene));
-	if (!scene)
-		exit(1); //todo : recheck this
-	scene->objectlst = malloc(sizeof(t_object) * count_number_of_object(buffer));
-	if (!scene->objectlst)
-		exit(1); //todo : recheck this
+	if (allocate(&scene, &buf_t, buffer) == -1)
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (buf_t[i])
 	{
-		//ft_putendl_fd(buf_t[i], 1);
-		if (ft_strcmp("cy", buf_t[i]) == 0) //cylinder
-		{
-			scene->objectlst[j].type = CYLINDER;
-			temp = ft_split(buf_t[i + 1], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].center.x = ft_atof(temp[0]);
-			scene->objectlst[j].center.y = ft_atof(temp[1]);
-			scene->objectlst[j].center.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			temp = ft_split(buf_t[i + 2], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].orient.x = ft_atof(temp[0]);
-			scene->objectlst[j].orient.y = ft_atof(temp[1]);
-			scene->objectlst[j].orient.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			scene->objectlst[j].radius = ft_atof(buf_t[i + 3]) / 2;
-			scene->objectlst[j].radius2 = scene->objectlst[j].radius * scene->objectlst[j].radius;
-			scene->objectlst[j].height = ft_atof(buf_t[i + 4]);
-			temp = ft_split(buf_t[i + 5], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].color = create_rgb(ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2]));
-			free_ft_split(temp);
+		return_value = parse_objects(scene, buf_t, i, j);
+		if (return_value == 0)
 			j++;
-		}
-		else if (ft_strcmp("pl", buf_t[i]) == 0) //plane
-		{
-			scene->objectlst[j].type = PLANE;
-			temp = ft_split(buf_t[i + 1], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].center.x = ft_atof(temp[0]);
-			scene->objectlst[j].center.y = ft_atof(temp[1]);
-			scene->objectlst[j].center.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			temp = ft_split(buf_t[i + 2], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].orient.x = ft_atof(temp[0]);
-			scene->objectlst[j].orient.y = ft_atof(temp[1]);
-			scene->objectlst[j].orient.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			temp = ft_split(buf_t[i + 3], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].color = create_rgb(ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2]));
-			free_ft_split(temp);
-			j++;
-		}
-		else if (ft_strcmp("sp", buf_t[i]) == 0) //sphere
-		{
-			scene->objectlst[j].type = SPHERE;
-			temp = ft_split(buf_t[i + 1], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].center.x = ft_atof(temp[0]);
-			scene->objectlst[j].center.y = ft_atof(temp[1]);
-			scene->objectlst[j].center.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			scene->objectlst[j].radius = ft_atof(buf_t[i + 2]) / 2;
-			scene->objectlst[j].radius2 = scene->objectlst[j].radius * scene->objectlst[j].radius;
-			temp = ft_split(buf_t[i + 3], ',');
-			if (!temp)
-				exit(1); //todo : recheck this
-			scene->objectlst[j].color = create_rgb(ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2]));
-			free_ft_split(temp);
-			j++;
-		}
-		else if (ft_strcmp("L", buf_t[i]) == 0)
-		{
-			temp = ft_split(buf_t[i + 1], ',');
-			scene->light.center.x = ft_atof(temp[0]);
-			scene->light.center.y = ft_atof(temp[1]);
-			scene->light.center.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			scene->light.brightness_ratio = ft_atof(buf_t[i + 2]);
-			temp = ft_split(buf_t[i + 3], ',');
-			scene->light.color = create_rgb(ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2]));
-			free_ft_split(temp);
-		}
-		else if (ft_strcmp("C", buf_t[i]) == 0)
-		{
-			temp = ft_split(buf_t[i + 1], ',');
-			scene->camera.origin.x = ft_atof(temp[0]);
-			scene->camera.origin.y = ft_atof(temp[1]);
-			scene->camera.origin.z = ft_atof(temp[2]);
-			free_ft_split(temp);
-			temp = ft_split(buf_t[i + 2], ',');
-			scene->camera.orient.x = ft_atof(temp[0]);
-			scene->camera.orient.y = ft_atof(temp[1]);
-			scene->camera.orient.z = ft_atof(temp[2]);
-			// todo : initialize orient magnitude from x,y,z
-			free_ft_split(temp);
-			scene->camera.fov = ft_atoi(buf_t[i + 3]);
-		}
-		else if (ft_strcmp("A", buf_t[i]) == 0)
-		{
-			scene->alight_lighting_ratio = ft_atof(buf_t[i + 1]);
-			temp = ft_split(buf_t[i + 2], ',');
-			scene->alight_color = create_rgb(ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2]));
-			free_ft_split(temp);
-		}
+		else if (return_value == -1 || parse_items(scene, buf_t, i) == -1)
+			return (NULL);
 		i++;
 	}
 	free_ft_split((char **)buf_t);
@@ -178,13 +114,13 @@ t_scene	*parse(char *file_path)
 	if (check_error(buffer) == -1)
 		exit(1);
 	replace_endl_by_space(buffer);
-	scene = init_objects_a(buffer);
+	scene = init_all(buffer);
 	return (scene);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_scene *scene;
+	t_scene	*scene;
 
 	if (argc == 2)
 	{
@@ -194,7 +130,8 @@ int main(int argc, char **argv)
 			write(1, "CRASH", 5);
 			exit(1);
 		}
-		printf("it works : %f", scene->light.center.x);
+		printf("test : %f\n", scene->light.center.x);
+		printf("it works : %f", scene->objectlst[0].orient.y);
 		free(scene->objectlst);
 		free(scene);
 	}

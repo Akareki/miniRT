@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:34:30 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 12:50:05 by wlalaoui         ###   ########.fr       */
+/*   Updated: 2024/01/31 13:05:43 by wlalaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,23 @@ typedef	struct s_scene
 	t_camera			camera;
 	t_light				light;
 	t_object			*objectlst;
+	int					objectlstsize;
 }	t_scene;
 
-//parsing
+//parsing utils
 void	free_ft_split(char **splited_str);
 double	ft_atof(const char *nptr);
-int		create_rgb(int r, int g, int b);
+int		do_rgb(int r, int g, int b);
 void	replace_endl_by_space(char *buffer);
+int		count_objects(const char *buffer);
+//parse items
+int		parse_cy(t_scene *s, char **buf_t, size_t i, size_t j);
+int		parse_pl(t_scene *s, char **buf_t, size_t i, size_t j);
+int		parse_sp(t_scene *s, char **buf_t, size_t i, size_t j);
+int 	parse_light(t_scene *s, char **buf_t, size_t i);
+int		parse_camera(t_scene *s, char **buf_t, size_t i);
+int		parse_ambientlight(t_scene *s, char **buf_t, size_t i);
+
 //error checking
 int		check_error(const char *buffer);
 //error check utils
@@ -103,5 +113,12 @@ int		is_coordinates(const char *str);
 int		is_orient(const char *str);
 int 	is_fov(const char *str);
 int		is_positive_float(const char *str);
+//error check items
+int	check_a(char **row);
+int	check_c(char **row);
+int	check_l(char **row);
+int	check_sp(char **row);
+int check_pl(char **row);
+int	check_cy(char **row);
 
 #endif

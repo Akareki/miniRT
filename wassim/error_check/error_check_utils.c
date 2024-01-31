@@ -6,7 +6,7 @@
 /*   By: wlalaoui <wlalaoui@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:48:00 by wlalaoui          #+#    #+#             */
-/*   Updated: 2024/01/29 15:14:04 by wlalaoui         ###   ########.fr       */
+/*   Updated: 2024/01/31 14:34:09 by wlalaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,30 @@
 
 int	is_rgb_str(const char *str)
 {
-	char	**temp;
-	size_t	i;
+	char	**t;
+	ssize_t	i;
 	int		comma_count;
 
-	i = 0;
+	i = -1;
 	comma_count = 0;
-	while (str[i])
+	while (str[++i])
 	{
 		if (str[i] == ',')
 			comma_count++;
 		if (!ft_isdigit(str[i]) && str[i] != ',')
 			return (-1);
-		i++;
 	}
 	if (comma_count != 2)
 		return (-1);
-	temp = ft_split(str, ',');
-	if (!temp)
+	t = ft_split(str, ',');
+	if (!t)
 		return (-1);
-	if (ft_atoi(temp[0]) < 0 || ft_atoi(temp[0]) > 255 || ft_atoi(temp[1]) < 0
-		|| ft_atoi(temp[1]) > 255
-		|| ft_atoi(temp[2]) < 0 || ft_atoi(temp[2]) > 255)
-		return (free_ft_split(temp), -1);
-	free_ft_split(temp);
+	if (!(t[0] && t[1] && t[2]))
+		return (free_ft_split(t), -1);
+	if (ft_atoi(t[0]) < 0 || ft_atoi(t[0]) > 255 || ft_atoi(t[1]) < 0
+		|| ft_atoi(t[1]) > 255 || ft_atoi(t[2]) < 0 || ft_atoi(t[2]) > 255)
+		return (free_ft_split(t), -1);
+	free_ft_split(t);
 	return (0);
 }
 
@@ -52,7 +52,7 @@ int	is_coordinates(const char *str)
 	ncomma_count = 0;
 	while (str[i])
 	{
-		if (str[i] == ',')
+		if (str[i] == ',' && str[i + 1] != ',')
 			comma_count++;
 		if (str[i] == '.')
 			ncomma_count++;
@@ -73,15 +73,17 @@ int	is_orient_next(const char *str)
 	temp = ft_split(str, ',');
 	if (!temp)
 		return (-1);
-	if (ft_atof(temp[0]) < 0 || ft_atof(temp[0]) > 1 || ft_atof(temp[1]) < 0
-		|| ft_atof(temp[1]) > 1 || ft_atof(temp[2]) < 0 || ft_atof(temp[2]) > 1)
+	if (!(temp[0] && temp[1] && temp[2]))
+		return (free_ft_split(temp), -1);
+	if (ft_atof(temp[0]) < -1 || ft_atof(temp[0]) > 1 || ft_atof(temp[1]) < -1
+		|| ft_atof(temp[1]) > 1
+		|| ft_atof(temp[2]) < -1 || ft_atof(temp[2]) > 1)
 		return (free_ft_split(temp), -1);
 	free_ft_split(temp);
 }
 
 int	is_orient(const char *str)
 {
-	char	**temp;
 	size_t	i;
 	int		comma_count;
 	int		ncomma_count;

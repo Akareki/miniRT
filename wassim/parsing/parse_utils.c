@@ -6,7 +6,7 @@
 /*   By: wlalaoui <wlalaoui@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 14:38:59 by wlalaoui          #+#    #+#             */
-/*   Updated: 2024/01/26 16:33:08 by wlalaoui         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:50:48 by wlalaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_ft_split(char **splited_str)
 	free(splited_str);
 }
 
-int	create_rgb(int r, int g, int b)
+int	do_rgb(int r, int g, int b)
 {
 	return (r << 16 | g << 8 | b);
 }
@@ -76,4 +76,22 @@ double	ft_atof(const char *nptr)
 		ten_pow *= 10;
 	}
 	return (sign * num);
+}
+
+int	count_objects(const char *buffer)
+{
+	size_t	i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (buffer[i])
+	{
+		if ((buffer[i] == 'c' && buffer[i + 1] == 'y')
+			|| (buffer[i] == 'p' && buffer[i + 1] == 'l')
+			|| (buffer[i] == 's' && buffer[i + 1] == 'p'))
+			count++;
+		i++;
+	}
+	return (count);
 }

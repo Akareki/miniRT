@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:16:42 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/31 09:32:52 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 14:48:50 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_vect	vect_coord(double x, double y, double z)
 {
-	t_vect vect;
+	t_vect	vect;
 
 	vect.x = x;
 	vect.y = y;
@@ -64,4 +64,3 @@ double	dot_product(t_vect v1, t_vect v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
-

@@ -26,8 +26,9 @@ CFLAGS 			=	-Wall -Wextra -Werror -g3
 
 CC 				=	cc #$(CFLAGS)
 
-SOURCES 		=	mini_rt.c parsing/parse.c parsing/parse_utils.c error_check/error_check.c \
-					error_check/error_check_utils.c error_check/check_error_utils2.c
+SOURCES 		=	mini_rt.c parsing/parse.c parsing/parse_utils.c parsing/parse_items.c error_check/error_check.c \
+					error_check/error_check_utils.c error_check/check_error_utils2.c error_check/error_check_items.c \
+					error_check/error_check_items2.c parsing/parse_items2.c
 
 OBJECTS_DIR		=	.objs/
 

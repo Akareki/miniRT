@@ -6,66 +6,11 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:21:07 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/31 11:13:21 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 15:25:56 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf/libft/libft.h"
 #include "mini_rt.h"
-
-int	init_objects(int argc, char **argv, t_scene *scene)
-{
-	t_object	*sphere;
-	t_object	*plane;
-	int			i;
-	int			j;
-
-	i = 1;
-	j = 0;
-	scene->objectarray = ft_calloc(argc + 3, sizeof(t_object *));
-	while (argv[i])
-	{
-		sphere = ft_calloc(1, sizeof(t_object));
-		sphere->type = SPHERE;
-		sphere->center.x = ft_atoi(argv[i]);
-		sphere->center.y = ft_atoi(argv[i + 1]);
-		sphere->center.z = ft_atoi(argv[i + 2]);
-		sphere->radius = ft_atoi(argv[i + 3]);
-		sphere->radius2 = sphere->radius * sphere->radius;
-		sphere->color = (255 << (8 * ((i / 4) % 3))) + (127 << (8 * ((i / 4) % 6))) + (63 << (8 * ((i / 4) % 12)));
-		scene->objectarray[j] = sphere;
-		i += 4;
-		j++;
-	}
-	plane = ft_calloc(1, sizeof(t_object));
-	plane->type = PLANE;
-	plane->center.x = 0;
-	plane->center.y = 0.5;
-	plane->center.z = 0;
-	plane->orient.x = 0;
-	plane->orient.y = 1;
-	plane->orient.z = 0;
-	plane->color = 255255;
-	normalize(&plane->orient);
-	scene->objectarray[j] = plane;
-	plane = ft_calloc(1, sizeof(t_object));
-	plane->type = CYLINDER;
-	plane->center.x = 0;
-	plane->center.y = 0;
-	plane->center.z = 0;
-	plane->orient.x = 0;
-	plane->orient.y = 1;
-	plane->orient.z = 0;
-	plane->color = 0x00FF0000;
-	plane->radius = 10;
-	plane->radius2 = 100;
-	plane->height = 2;
-	plane->orient.magn = vect_magn(plane->orient);
-	plane->orient.magn2 = vect_magn2(plane->orient);
-	normalize(&plane->orient);
-	scene->objectarray[j + 1] = plane;
-	return (0);
-}
 
 t_matrix	c2w_matrix(t_camera camera)
 {
@@ -97,16 +42,7 @@ int	init_scene(int argc, char **argv, t_scene *scene)
 {
 	scene->size_x = 1920;
 	scene->size_y = 1080;
-	scene->camera.origin = point_coord(0, 10, 0);
-	scene->camera.orient = vect_coord(0, -1, 0);
-	scene->light.center = point_coord(0, 7, 0);
-	scene->light.brightness_ratio = 1;
-	scene->alight_color = 0x00777777;
-	scene->alight_lighting_ratio = 0.2;
-	normalize(&scene->camera.orient);
-	scene->camera.fov = 60;
 	scene->camera.c2w = c2w_matrix(scene->camera);
-	init_objects(argc, argv, scene);
 	return (1);
 }
 
@@ -132,4 +68,3 @@ int	image_init(int argc, char **argv, t_scene *scene)
 	scene->mlx_i = mlx_i;
 	return (0);
 }
-

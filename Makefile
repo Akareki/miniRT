@@ -6,7 +6,7 @@
 #    By: aoizel <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 09:38:02 by aoizel            #+#    #+#              #
-#    Updated: 2024/01/31 10:10:35 by aoizel           ###   ########.fr        #
+#    Updated: 2024/01/31 15:08:42 by aoizel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,10 @@ CFLAGS 			=	-Wall -Wextra -Werror
 CC 				=	cc #$(CFLAGS)
 
 SOURCES 		=	mini_rt.c utils.c utils2.c utils3.c utils4.c init.c mlx_utils.c \
-					intersections.c
+					mini_rt2.c intersections.c intersections2.c\
+					parse.c parse_utils.c parse_items.c error_check.c \
+					error_check_utils.c error_check_utils2.c error_check_items.c \
+					error_check_items2.c parse_items2.c
 
 OBJECTS_DIR		=	.objs/
 

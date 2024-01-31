@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:19:29 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/31 09:27:34 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 14:48:29 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	normalize(t_vect *vect)
 t_point	point_coord(double x, double y, double z)
 {
 	t_point	point;
+
 	point.x = x;
 	point.y = y;
 	point.z = z;
@@ -55,7 +56,6 @@ t_vect	vect_between_points(t_point a, t_point b)
 	return (vect);
 }
 
-
 t_vect	matrix_product(t_matrix m, t_vect v)
 {
 	t_vect	res;
@@ -65,5 +65,3 @@ t_vect	matrix_product(t_matrix m, t_vect v)
 	res.z = m.a[2][0] * v.x + m.a[2][1] * v.y + m.a[2][2] * v.z;
 	return (res);
 }
-
-
