@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:21:07 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 15:38:50 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 11:13:21 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,11 @@ int	init_objects(int argc, char **argv, t_scene *scene)
 	plane->orient.y = 1;
 	plane->orient.z = 0;
 	plane->color = 0x00FF0000;
-	plane->radius = 1;
-	plane->radius2 = 1;
+	plane->radius = 10;
+	plane->radius2 = 100;
+	plane->height = 2;
+	plane->orient.magn = vect_magn(plane->orient);
+	plane->orient.magn2 = vect_magn2(plane->orient);
 	normalize(&plane->orient);
 	scene->objectarray[j + 1] = plane;
 	return (0);
@@ -73,6 +76,8 @@ t_matrix	c2w_matrix(t_camera camera)
 
 	vert = vect_coord(0, 1, 0);
 	right = cross_product(camera.orient, vert);
+	if (right.magn < 0.0001)
+		right = vect_coord(1, 0, 0);
 	normalize(&right);
 	up = cross_product(right, camera.orient);
 	normalize(&up);
@@ -92,14 +97,14 @@ int	init_scene(int argc, char **argv, t_scene *scene)
 {
 	scene->size_x = 1920;
 	scene->size_y = 1080;
-	scene->camera.origin = point_coord(10, 10, 10);
-	scene->camera.orient = vect_coord(-1, -1, -1);
-	scene->light.center = point_coord(7, 7, 7);
-	scene->light.brightness_ratio = 0.8;
+	scene->camera.origin = point_coord(0, 10, 0);
+	scene->camera.orient = vect_coord(0, -1, 0);
+	scene->light.center = point_coord(0, 7, 0);
+	scene->light.brightness_ratio = 1;
 	scene->alight_color = 0x00777777;
 	scene->alight_lighting_ratio = 0.2;
 	normalize(&scene->camera.orient);
-	scene->camera.fov = 90;
+	scene->camera.fov = 60;
 	scene->camera.c2w = c2w_matrix(scene->camera);
 	init_objects(argc, argv, scene);
 	return (1);

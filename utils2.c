@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:16:42 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 10:06:07 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 09:32:52 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_vect	add_vect(t_vect v1, t_vect v2)
 	res.x = v1.x + v2.x;
 	res.y = v1.y + v2.y;
 	res.z = v1.z + v2.z;
+	res.magn = vect_magn(res);
+	res.magn2 = vect_magn2(res);
 	return (res);
 }
 
@@ -41,6 +43,8 @@ t_vect	sub_vect(t_vect v1, t_vect v2)
 	res.x = v1.x - v2.x;
 	res.y = v1.y - v2.y;
 	res.z = v1.z - v2.z;
+	res.magn = vect_magn(res);
+	res.magn2 = vect_magn2(res);
 	return (res);
 }
 

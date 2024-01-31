@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:34:20 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 15:41:27 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 10:54:36 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,25 @@ double	cast_shadow_ray(t_scene scene, t_ray ray)
 	return (-1);	
 }
 
+t_vect	cylinder_normal(t_object cylinder, t_point hit_point)
+{
+	t_vect normal;
+	
+	if (cross_product(vect_between_points(cylinder.center, hit_point), cylinder.orient).magn < cylinder.radius - 0.0001)
+	{
+		if (dot_product(cylinder.orient, vect_between_points(cylinder.center, hit_point)) > 0.0001)
+			normal = cylinder.orient;
+		if (dot_product(cylinder.orient, vect_between_points(cylinder.center, hit_point)) < -0.0001)
+			normal = scale_vect(-1, cylinder.orient);
+		normalize(&normal);
+		return (normal);
+	}
+	normal = sub_vect(vect_between_points(cylinder.center, hit_point), 
+			scale_vect(dot_product(vect_between_points(cylinder.center, hit_point), cylinder.orient), cylinder.orient));
+	normalize(&normal);
+	return (normal);
+}
+
 t_vect	object_normal(t_object *object, t_point hit_point)
 {
 	t_vect	normal;
@@ -76,6 +95,10 @@ t_vect	object_normal(t_object *object, t_point hit_point)
 	if (object->type == PLANE)
 	{
 		normal = object->orient;
+	}
+	if (object->type == CYLINDER)
+	{
+		normal = cylinder_normal(*object, hit_point);
 	}
 	return (normal);
 }

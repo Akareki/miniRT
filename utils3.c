@@ -6,11 +6,23 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 08:19:29 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 10:32:17 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 09:27:34 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+
+t_vect	scale_vect(double t, t_vect v)
+{
+	t_vect	res;
+
+	res.x = t * v.x;
+	res.y = t * v.y;
+	res.z = t * v.z;
+	res.magn = vect_magn(res);
+	res.magn2 = vect_magn2(res);
+	return (res);
+}
 
 void	normalize(t_vect *vect)
 {

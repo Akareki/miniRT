@@ -6,7 +6,7 @@
 /*   By: aoizel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:34:30 by aoizel            #+#    #+#             */
-/*   Updated: 2024/01/29 15:37:22 by aoizel           ###   ########.fr       */
+/*   Updated: 2024/01/31 11:12:29 by aoizel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef	struct s_camera
 {
 	t_point		origin;
 	t_vect		orient;
-	int			fov;
+	double		fov;
 	t_matrix	c2w;
 }	t_camera;
 
@@ -95,12 +95,14 @@ double	double_max(double a, double b);
 double	point_dist(t_point a, t_point b);
 double	point_dist2(t_point a, t_point b);
 t_point	point_coord(double x, double y, double z);
+t_point	point_origin_scale_dir(t_point origin, double scale, t_vect dir);
 t_vect	vect_coord(double x, double y, double z);
 t_vect	vect_between_points(t_point a, t_point b);
 double	vect_magn(t_vect vect);
 double	vect_magn2(t_vect vect);
 t_vect	add_vect(t_vect v1, t_vect v2);
 t_vect	sub_vect(t_vect v1, t_vect v2);
+t_vect	scale_vect(double t, t_vect v);
 t_vect	cross_product(t_vect v1, t_vect v2);
 double	dot_product(t_vect v1, t_vect v2);
 void	normalize(t_vect *vect);
